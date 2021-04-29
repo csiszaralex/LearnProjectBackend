@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from 'dotenv';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
+import { FilesModule } from './files/files.module';
 config();
 @Module({
   controllers: [AppController],
@@ -18,6 +19,7 @@ config();
       synchronize: true,
     }),
     UsersModule,
+    FilesModule,
   ],
   providers: [],
 })
