@@ -1,37 +1,40 @@
 import {
   Controller,
-  Get,
   Post,
-  Param,
-  UseGuards,
   UseInterceptors,
   UploadedFile,
+  Get,
+  Param,
+  Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('File')
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Post('')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File): any {
-    return {
-      // file: file.buffer.toString(),
-      file,
-    };
+  @Post()
+  @UseInterceptors(FileInterceptor('file', { dest: 'uploads' }))
+  uploadFile(@UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.filesService.uploadFile(file);
   }
 
   @Get()
-  @UseGuards(AuthGuard())
-  findAll() {
-    // return this.filesService.findAll();
+  getImages() {
+    return this.filesService.getImages();
   }
 
+  //TODO
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    // return this.filesService.findOne(+id);
+  downloadImage(@Param('id', ValidationPipe) id: number) {
+    return this.filesService.downloadImage(id);
+  }
+
+  @Delete(':id')
+  deleteImage(@Param('id', ValidationPipe) id: number): Promise<void> {
+    return this.filesService.deleteImage(id);
   }
 }

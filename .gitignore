@@ -3,6 +3,9 @@
 /node_modules
 .env
 
+# Feltöltött fájlok
+uploads/
+
 # Logs
 logs
 *.log
