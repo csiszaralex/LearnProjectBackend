@@ -39,6 +39,17 @@ export class FilesRepository extends Repository<File> {
     return file;
   }
 
+  async addDownload(id: number) {
+    const file = await this.getById(id);
+    file.downloads++;
+    try {
+      file.save();
+    } catch (err) {
+      this.logger.warn(err);
+      throw new InternalServerErrorException();
+    }
+  }
+
   async deleteFile(id): Promise<void> {
     const file = await this.getById(id);
     try {
