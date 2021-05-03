@@ -19,4 +19,7 @@ export class File extends BaseEntity {
 
   @Column()
   size: number;
+
+  @Column({ default: 0 })
+  downloads: number;
 }

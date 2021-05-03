@@ -2,7 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './entities/file.entity';
 import { FilesRepository } from './files.repository';
-import { unlinkSync } from 'fs';
+import { unlinkSync, createReadStream } from 'fs';
+import { Response } from 'express';
 
 @Injectable()
 export class FilesService {
@@ -23,8 +24,14 @@ export class FilesService {
     return this.filesRepository.getAll();
   }
 
-  downloadImage(id: number) {
-    //! Egy fájl letöltése ID alapján
+  async downloadImage(id: number, res: Response) {
+    await this.filesRepository.addDownload(id);
+    const file = await this.filesRepository.getById(id);
+    res.header('Content-Type', file.mime);
+    res.header('Content-Disposition', `attachment; filename="${file.name}"`);
+
+    const data = createReadStream(file.path);
+    data.pipe(res);
   }
 
   async deleteImage(id: number): Promise<void> {
