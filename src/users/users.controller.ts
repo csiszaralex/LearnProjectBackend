@@ -37,6 +37,7 @@ export class UsersController {
   signIn(@Body(ValidationPipe) signinUserDto: SigninUserDto): Promise<SignInPayloadInterface> {
     return this.usersService.signinUser(signinUserDto);
   }
+
   @Get('renew')
   @UseGuards(AuthGuard())
   renewUser(@GetUserid() id: number): Promise<SignInPayloadInterface> {

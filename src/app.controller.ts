@@ -131,4 +131,9 @@ export class AppController {
   test(@Query('limit') limit = 3, @Query('page') page = 1) {
     return this.data.filter(d => (page - 1) * limit < d.id && d.id <= page * limit);
   }
+
+  @Get()
+  getHello(): string {
+    return 'Hello World!';
+  }
 }
