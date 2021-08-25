@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { FilesModule } from './files/files.module';
+import { ChatModule } from './chat/chat.module';
 config();
 @Module({
   controllers: [AppController],
@@ -20,6 +21,7 @@ config();
     }),
     UsersModule,
     FilesModule,
+    ChatModule,
   ],
   providers: [],
 })
