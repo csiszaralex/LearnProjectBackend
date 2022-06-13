@@ -10,9 +10,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [UsersController],
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.SECRET || 'niszIsTheBest123',
-      signOptions: { expiresIn: process.env.EXPIRES_IN || '1h' },
+    JwtModule.registerAsync({
+      useFactory: () => {
+        return {
+          secret: process.env.SECRET || 'secret',
+          signOptions: {
+            expiresIn: '1h',
+          },
+        };
+      },
     }),
     TypeOrmModule.forFeature([UserRepository]),
   ],
