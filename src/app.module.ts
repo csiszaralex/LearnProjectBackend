@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'dotenv';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { FilesModule } from './files/files.module';
-config();
 @Module({
   controllers: [AppController],
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: [process.env.NODE_ENV === 'production' ? '.env' : '.env.dev', '.env.example'],
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOSTNAME || 'localhost',
